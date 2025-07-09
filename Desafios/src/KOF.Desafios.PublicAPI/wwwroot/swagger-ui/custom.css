@@ -1,0 +1,31 @@
+.swagger-ui img {
+    content: url("https://cdn.haitrieu.com/wp-content/uploads/2022/01/Logo-Cocacola-Ci.png");
+    height: 70px;
+}
+
+.swagger-ui .topbar {
+    background-color: #FFFFFF;
+    padding: 10px 0;
+    color: #000000;
+}
+
+.swagger-ui .topbar .download-url-wrapper .select-label {
+    color: #000000;
+}
+
+/* Oculta el logo original de Swagger (que es un SVG) */
+.swagger-ui .topbar-wrapper svg {
+    display: none;
+}
+
+/* Muestra tu logo como fondo de la barra */
+.swagger-ui .topbar-wrapper::before {
+    content: "";
+    display: block;
+    background-image: url("https://cdn.haitrieu.com/wp-content/uploads/2022/01/Logo-Cocacola-Ci.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: left center;
+    height: 70px;
+    margin-left: 20px;
+}

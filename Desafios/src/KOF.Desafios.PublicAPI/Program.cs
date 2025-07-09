@@ -16,12 +16,17 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 var app = builder.Build();
+Console.WriteLine($"Environment: {app.Environment.EnvironmentName}");
 
+app.UseStaticFiles();
 // Middlewares básicos
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+        {
+            options.InjectStylesheet("/swagger-ui/custom.css");
+        });
 }
 
 app.UseHttpsRedirection();
