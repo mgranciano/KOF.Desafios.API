@@ -1,3 +1,4 @@
+using KOF.Desafios.PublicAPI.Middleware;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,10 +30,14 @@ if (app.Environment.IsDevelopment())
         });
 }
 
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+await app.RunAsync();
+
+public partial class Program { }
