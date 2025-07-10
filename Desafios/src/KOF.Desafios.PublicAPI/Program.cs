@@ -1,4 +1,9 @@
+using KOF.Desafios.Application.Interfaces.Desafios;
+using KOF.Desafios.Application.Services.Desafios;
+using KOF.Desafios.Infrastructure.Data;
+using KOF.Desafios.Infrastructure.Repositories;
 using KOF.Desafios.PublicAPI.Middleware;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +34,12 @@ if (app.Environment.IsDevelopment())
             options.InjectStylesheet("/swagger-ui/custom.css");
         });
 }
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IDesafiosRepository, DesafiosRepository>();
+builder.Services.AddScoped<IDesafiosService, DesafiosService>();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
