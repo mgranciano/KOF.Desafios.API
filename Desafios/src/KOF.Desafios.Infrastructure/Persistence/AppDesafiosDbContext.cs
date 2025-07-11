@@ -8,6 +8,7 @@ public class AppDesafiosDbContext : DbContext
 {
     public DbSet<InformacionGeneral> InformacionGeneral { get; set; }
     public DbSet<InformacionParticipante> InformacionParticipante { get; set; }
+    
     public AppDesafiosDbContext(DbContextOptions<AppDesafiosDbContext> options) : base(options) { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

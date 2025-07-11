@@ -15,9 +15,10 @@ public class DesafiosRepository : IDesafiosRepository
         _context = context;
     }
 
-    public async Task<InformacionGeneral> GetAllChallenges(int idDesafio, string idCliente, string idPais = "GT")
+    public async Task<List<InformacionGeneral>> GetAllChallenges(int idDesafio, string idCliente, string idPais = "GT")
     {
         return await _context.InformacionGeneral
-            .FirstOrDefaultAsync(x => x.IdDesafio == idDesafio && x.IdSegmentacion == 1) ?? new InformacionGeneral();
+            .Where(x => x.IdDesafio == idDesafio && x.IdSegmentacion == 1)
+            .ToListAsync();
     }
 }

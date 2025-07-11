@@ -5,5 +5,5 @@ namespace KOF.Desafios.Application.Interfaces.Desafios;
 
 public interface IDesafiosRepository
 {
-    Task<InformacionGeneral> GetAllChallenges(int idDesafio, string idCliente, string idPais = "GT");
+    Task<List<InformacionGeneral>> GetAllChallenges(int idDesafio, string idCliente, string idPais = "GT");
 }

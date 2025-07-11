@@ -13,27 +13,26 @@ namespace KOF.Desafios.Application.Services.Desafios;
 
 public class DesafiosService : IDesafiosService
 {
-    private readonly IMapper<InformacionGeneral, InformacionGeneralDto> _mapper = new ExpressionTreeMapper<InformacionGeneral, InformacionGeneralDto>();
+    private readonly IMapper<List<InformacionGeneral>, List<InformacionGeneralDto>> _mapper = new ExpressionTreeMapper<List<InformacionGeneral>, List<InformacionGeneralDto>>();
     private readonly IDesafiosRepository _desafioRepository;
-    private readonly IValidatorOrquestador _validatorOrquestador;
 
-    public DesafiosService(IDesafiosRepository desafioRepository, IValidatorOrquestador validatorOrquestador)
+
+    public DesafiosService(IDesafiosRepository desafioRepository)
     {
         _desafioRepository = desafioRepository;
-        _validatorOrquestador = validatorOrquestador;
     }
 
-    public async Task<InformacionGeneralDto> GetAllChallenges(int idDesafio, string idCliente, string idPais = "GT")
+    public async Task<List<InformacionGeneralDto>> GetAllChallenges(int idDesafio, string idCliente, string idPais = "GT")
     {
         var desafio = await _desafioRepository.GetAllChallenges(idDesafio, idCliente, idPais);
 
-        if (desafio == null)
+        if (desafio == null || !desafio.Any())
         {
-            return null;
+            return new List<InformacionGeneralDto>();
         }
+
         var dto = _mapper.Map(desafio);
-        
-        await _validatorOrquestador.ValidateAsync(dto, Operacion.Read);
+
 
         return dto;
     }
