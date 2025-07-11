@@ -1,17 +1,16 @@
 using System;
-using KOF.Desafios.Application.Interfaces;
 using KOF.Desafios.Application.Interfaces.Desafios;
 using KOF.Desafios.Domain.Entities.Desafios;
-using KOF.Desafios.Infrastructure.Data;
+using KOF.Desafios.Infrastructure.Repositories.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace KOF.Desafios.Infrastructure.Repositories;
 
 public class DesafiosRepository : IDesafiosRepository
 {
-    private readonly AppDbContext _context;
+    private readonly AppDesafiosDbContext _context;
 
-    public DesafiosRepository(AppDbContext context)
+    public DesafiosRepository(AppDesafiosDbContext context)
     {
         _context = context;
     }

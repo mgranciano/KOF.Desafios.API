@@ -1,7 +1,12 @@
+using FluentValidation;
+using KOF.Desafios.Application.Common.Validators.Interfaces;
+using KOF.Desafios.Application.Common.Validators.Orquestador;
+using KOF.Desafios.Application.Dtos.Desafios;
 using KOF.Desafios.Application.Interfaces.Desafios;
 using KOF.Desafios.Application.Services.Desafios;
-using KOF.Desafios.Infrastructure.Data;
+using KOF.Desafios.Application.Validators.Desafios;
 using KOF.Desafios.Infrastructure.Repositories;
+using KOF.Desafios.Infrastructure.Repositories.Persistence;
 using KOF.Desafios.PublicAPI.Middleware;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -20,6 +25,18 @@ builder.Services.AddSwaggerGen(options =>
         Description = "API inicial del proyecto KOF Desafíos"
     });
 });
+var conn = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<AppDesafiosDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IDesafiosRepository, DesafiosRepository>();
+builder.Services.AddScoped<IDesafiosService, DesafiosService>();
+
+// FluentValidation
+builder.Services.AddScoped<IValidator<InformacionGeneralDto>, InformacionGeneralDtoReadValidator>();
+builder.Services.AddScoped<InformacionGeneralDtoReadValidator>();
+// Orquestador
+builder.Services.AddScoped<IValidatorOrquestador, ValidatorOrquestador>();
 
 var app = builder.Build();
 Console.WriteLine($"Environment: {app.Environment.EnvironmentName}");
@@ -34,12 +51,6 @@ if (app.Environment.IsDevelopment())
             options.InjectStylesheet("/swagger-ui/custom.css");
         });
 }
-
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-builder.Services.AddScoped<IDesafiosRepository, DesafiosRepository>();
-builder.Services.AddScoped<IDesafiosService, DesafiosService>();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
