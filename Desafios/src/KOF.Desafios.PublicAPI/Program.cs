@@ -25,7 +25,6 @@ builder.Services.AddSwaggerGen(options =>
         Description = "API inicial del proyecto KOF Desafíos"
     });
 });
-var conn = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<AppDesafiosDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
