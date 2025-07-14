@@ -8,4 +8,8 @@ namespace KOF.Desafios.Application.Interfaces.Desafios;
 public interface IDesafiosRepository
 {
     Task<List<InformacionGeneral>> GetAllAsync(DesafioRequest request);
+    Task<InformacionGeneral?> GetByIdAsync(int id);
+    Task<InformacionGeneral> CreateAsync(InformacionGeneral desafio);
+    Task<InformacionGeneral> UpdateAsync(InformacionGeneral desafio);
+    Task<bool> DeleteAsync(int id);
 }

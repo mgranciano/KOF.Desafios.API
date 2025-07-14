@@ -44,10 +44,12 @@ namespace KOF.Desafios.PublicAPI.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             _logService.LogInfo($"Inicio de consulta de desafío por ID: {id}");
+            if (id <= 0)
+                return BadRequest("ID must be greater than zero");
 
             var desafio = await _desafioService.GetByIdAsync(id);
             if (desafio == null)
-                return NotFound();
+                return NotFound("Registro no encontrado");
             return Ok(desafio);
         }
 

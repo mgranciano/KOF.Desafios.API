@@ -28,11 +28,31 @@ namespace KOF.Desafios.Infrastructure.Desafios.Services
             _logService = logService;
         }
 
-        public Task<List<InformacionGeneral>> GetAllAsync(DesafioRequest request)
+        public async Task<InformacionGeneral> CreateAsync(InformacionGeneral desafio)
         {
-            return _context.InformacionGeneral
+            throw new NotImplementedException();
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<List<InformacionGeneral>> GetAllAsync(DesafioRequest request)
+        {
+            return await _context.InformacionGeneral
             .Where(x => x.IdSegmentacion != 0)
             .ToListAsync();
+        }
+
+        public async Task<InformacionGeneral?> GetByIdAsync(int id)
+        {
+            return await _context.InformacionGeneral.FindAsync(id);
+        }
+
+        public async Task<InformacionGeneral> UpdateAsync(InformacionGeneral desafio)
+        {
+            throw new NotImplementedException();
         }
     }
 }

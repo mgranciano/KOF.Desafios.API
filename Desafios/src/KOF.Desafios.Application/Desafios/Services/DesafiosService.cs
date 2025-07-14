@@ -73,9 +73,35 @@ public class DesafiosService : IDesafioService
         return dto;
     }
 
-    public Task<InformacionGeneralDto?> GetByIdAsync(int id)
+    public async Task<InformacionGeneralDto?> GetByIdAsync(int id)
     {
-        throw new NotImplementedException();
+        var desafio = await _desafioRepository.GetByIdAsync(id);
+        if (desafio == null)
+        {
+            return null;
+        }
+        //  var dto = _mapper.MapBack<InformacionGeneralDto>(desafio);
+        var dto = new InformacionGeneralDto
+        {
+            DescripcionDesafio = desafio.DescripcionDesafio,
+            IdDesafio = desafio.IdDesafio,
+            IdSegmentacion = desafio.IdSegmentacion,
+            Estatus = desafio.Estatus,
+            FechaCreacion = desafio.FechaCreacion,
+            FechaCancela = desafio.FechaCancela,
+            FechaCierre = desafio.FechaCierre,
+            FechaFinalizacion = desafio.FechaFinalizacion,
+            FechaInicio = desafio.FechaInicio,
+            FechaPublicacion = desafio.FechaPublicacion,
+            JsonMateriales = desafio.JsonMateriales,
+            LogotipoDesafio = desafio.LogotipoDesafio,
+            Promocion = desafio.Promocion,
+            TituloDesafio = desafio.TituloDesafio,
+            UsuarioCreacion = desafio.UsuarioCreacion,
+            UsuarioCierre = desafio.UsuarioCierre,
+            UsuarioPublicacion = desafio.UsuarioPublicacion
+        };
+        return dto;
     }
 
     public Task<InformacionGeneralDto> UpdateAsync(int id, InformacionGeneralDto dto)
