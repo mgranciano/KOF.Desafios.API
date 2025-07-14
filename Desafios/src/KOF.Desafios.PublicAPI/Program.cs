@@ -1,39 +1,43 @@
 using KOF.Desafios.PublicAPI.Middleware;
-using Microsoft.OpenApi.Models;
+using KOF.Desafios.PublicAPI.Configurations;
+using KOF.Desafios.Application.Common.Mappings;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Servicios básicos
+// Servicios
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.SwaggerDoc("v1", new OpenApiInfo
-    {
-        Title = "KOF.Desafios.API",
-        Version = "v1",
-        Description = "API inicial del proyecto KOF Desafíos"
-    });
-});
+builder.Services.AddCustomSwagger();
+builder.Services.AddJwtAuthentication(builder.Configuration);
+builder.Services.AddCustomCors();
+builder.Services.AddCustomServices(builder.Configuration);
+builder.Services.AddCustomMappers();
+
+// Logging
+builder.Services.AddApplicationInsightsTelemetry(builder.Configuration["ApplicationInsights:ConnectionString"]);
 
 var app = builder.Build();
 Console.WriteLine($"Environment: {app.Environment.EnvironmentName}");
 
+// Middleware
+app.UseCors("QCORS");
 app.UseStaticFiles();
-// Middlewares básicos
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI(options =>
-        {
-            options.InjectStylesheet("/swagger-ui/custom.css");
-        });
+    {
+        options.InjectStylesheet("/swagger-ui/custom.css");
+    });
 }
 
+app.UseMiddleware<RequestContextMiddleware>();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
+app.UseMiddleware<LoggingScopeMiddleware>();
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
