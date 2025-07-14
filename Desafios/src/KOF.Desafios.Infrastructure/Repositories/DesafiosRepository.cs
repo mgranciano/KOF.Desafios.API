@@ -1,4 +1,5 @@
 using System;
+using KOF.Desafios.Application.Entities.Desafios.Request;
 using KOF.Desafios.Application.Interfaces.Desafios;
 using KOF.Desafios.Domain.Entities.Desafios;
 using KOF.Desafios.Infrastructure.Repositories.Persistence;
@@ -15,10 +16,9 @@ public class DesafiosRepository : IDesafiosRepository
         _context = context;
     }
 
-    public async Task<List<InformacionGeneral>> GetAllChallenges(int idDesafio, string idCliente, string idPais = "GT")
+    public async Task<List<InformacionGeneral>> GetAllChallenges(DesafioRequest request)
     {
         return await _context.InformacionGeneral
-            .Where(x => x.IdDesafio == idDesafio && x.IdSegmentacion == 1)
             .ToListAsync();
     }
 }

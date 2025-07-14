@@ -1,5 +1,6 @@
 using KOF.Desafios.Application.Common.Validators.Interfaces;
 using KOF.Desafios.Application.Dtos.Desafios;
+using KOF.Desafios.Application.Dtos.Desafios.Request;
 using KOF.Desafios.Application.Services.Desafios;
 using KOF.Desafios.Application.Validators;
 using KOF.Desafios.Domain.Common.Enums;
@@ -21,12 +22,12 @@ namespace KOF.Desafios.PublicAPI.Controllers
             _validatorOrquestador = validatorOrquestador;
         }
 
-        [HttpGet("GetAllChallenges")]
-        public async Task<IActionResult> GetAllChallenges(int idDesafio, string idCliente, string idPais = "GT")
+        [HttpPost("GetAllChallenges")]
+        public async Task<IActionResult> GetAllChallenges([FromBody] DesafioRequestDto request)
         {
             // Validate the input parameters
-            // await _validatorOrquestador.ValidateAsync(new { idDesafio, idCliente, idPais }, Operacion.Read);
-            var result = await _desafiosService.GetAllChallenges(idDesafio, idCliente, idPais);
+            await _validatorOrquestador.ValidateAsync(request, Operacion.Read);
+            var result = await _desafiosService.GetAllChallenges(request);
             if (result == null)
             {
                 return NotFound();

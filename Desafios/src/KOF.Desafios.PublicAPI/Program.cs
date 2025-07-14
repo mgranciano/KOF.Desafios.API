@@ -2,9 +2,11 @@ using FluentValidation;
 using KOF.Desafios.Application.Common.Validators.Interfaces;
 using KOF.Desafios.Application.Common.Validators.Orquestador;
 using KOF.Desafios.Application.Dtos.Desafios;
+using KOF.Desafios.Application.Dtos.Desafios.Request;
 using KOF.Desafios.Application.Interfaces.Desafios;
 using KOF.Desafios.Application.Services.Desafios;
 using KOF.Desafios.Application.Validators.Desafios;
+using KOF.Desafios.Application.Validators.Desafios.Request;
 using KOF.Desafios.Infrastructure.Repositories;
 using KOF.Desafios.Infrastructure.Repositories.Persistence;
 using KOF.Desafios.PublicAPI.Middleware;
@@ -34,6 +36,9 @@ builder.Services.AddScoped<IDesafiosService, DesafiosService>();
 // FluentValidation
 builder.Services.AddScoped<IValidator<InformacionGeneralDto>, InformacionGeneralDtoReadValidator>();
 builder.Services.AddScoped<InformacionGeneralDtoReadValidator>();
+builder.Services.AddScoped<IValidator<DesafioRequestDto>, DesafioRequestDtoReadValidator>();
+builder.Services.AddScoped<DesafioRequestDtoReadValidator>();
+
 // Orquestador
 builder.Services.AddScoped<IValidatorOrquestador, ValidatorOrquestador>();
 
