@@ -10,6 +10,7 @@ using KOF.Desafios.Application.Dtos.Desafios.Request;
 using KOF.Desafios.Application.Common.Validators.Interfaces;
 using KOF.Desafios.Domain.Common.Enums;
 using KOF.Desafios.Application.Dtos.Desafios;
+using KOF.Desafios.Application.Desafios.Dto.Request;
 
 namespace KOF.Desafios.PublicAPI.Controllers
 {
@@ -65,15 +66,12 @@ namespace KOF.Desafios.PublicAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] InformacionGeneralDto dto)
+        public async Task<IActionResult> Update(int id, [FromBody] InformacionGeneralUpdateDto dto)
         {
             _logService.LogInfo($"Inicio de actualización de desafío con ID: {id}");
 
             if (id != dto.IdDesafio)
                 return BadRequest("ID mismatch");
-
-            await _validatorOrquestador.ValidateAsync(dto, Operacion.Update);
-
 
             var updated = await _desafioService.UpdateAsync(id, dto);
             return Ok(updated);

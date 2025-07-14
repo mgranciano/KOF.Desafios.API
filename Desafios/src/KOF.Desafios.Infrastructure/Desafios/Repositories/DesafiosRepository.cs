@@ -12,6 +12,7 @@ using KOF.Desafios.Application.Dtos.Desafios.Request;
 using KOF.Desafios.Domain.Entities.Desafios;
 using KOF.Desafios.Application.Interfaces.Desafios;
 using KOF.Desafios.Application.Entities.Desafios.Request;
+using KOF.Desafios.Application.Desafios.Entities.Request;
 
 namespace KOF.Desafios.Infrastructure.Desafios.Services
 {
@@ -40,7 +41,18 @@ namespace KOF.Desafios.Infrastructure.Desafios.Services
 
         public async Task<bool> DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            _logService.LogInfo($"Deleting desafio with ID: {id}");
+            var desafio = await _context.InformacionGeneral.FindAsync(id);
+            if (desafio == null)
+            {
+                return false;
+            }
+
+            desafio.Estatus = "Eliminado";
+            _context.InformacionGeneral.Update(desafio);
+            await _context.SaveChangesAsync();
+            _logService.LogInfo($"Desafio with ID: {id} deleted successfully");
+            return true;
         }
 
         public async Task<List<InformacionGeneral>> GetAllAsync(DesafioRequest request)
@@ -55,9 +67,22 @@ namespace KOF.Desafios.Infrastructure.Desafios.Services
             return await _context.InformacionGeneral.FindAsync(id);
         }
 
-        public async Task<InformacionGeneral> UpdateAsync(InformacionGeneral desafio)
+        public async Task<InformacionGeneral> UpdateAsync(InformacionGeneralUpdate desafio)
         {
-            throw new NotImplementedException();
+            var entity = await _context.InformacionGeneral.FindAsync(desafio.IdDesafio);
+            if (entity == null)
+            {
+                throw new Exception("Desafio not found");
+            }
+
+            entity.TituloDesafio = desafio.TituloDesafio;
+            entity.DescripcionDesafio = desafio.DescripcionDesafio;
+            entity.LogotipoDesafio = desafio.LogotipoDesafio;
+            entity.Promocion = desafio.Promocion;
+            entity.PuntosExtra = desafio.PuntosExtra;
+
+            await _context.SaveChangesAsync();
+            return entity;
         }
     }
 }

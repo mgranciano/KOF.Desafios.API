@@ -1,5 +1,7 @@
 using KOF.Desafios.Application.Common.Mappings;
 using KOF.Desafios.Application.Common.Mappings.Interfaces;
+using KOF.Desafios.Application.Desafios.Dto.Request;
+using KOF.Desafios.Application.Desafios.Entities.Request;
 using KOF.Desafios.Application.Desafios.Interfaces;
 using KOF.Desafios.Application.Dtos.Desafios;
 using KOF.Desafios.Application.Dtos.Desafios.Request;
@@ -13,7 +15,6 @@ namespace KOF.Desafios.Application.Services.Desafios;
 public class DesafiosService : IDesafioService
 {
     private readonly IDesafiosRepository _desafioRepository;
-    private readonly IMapper<List<InformacionGeneral>, List<InformacionGeneralDto>> _mapper = new ExpressionTreeMapper<List<InformacionGeneral>, List<InformacionGeneralDto>>();
     public DesafiosService(IDesafiosRepository desafioRepository)
     {
         _desafioRepository = desafioRepository;
@@ -39,9 +40,10 @@ public class DesafiosService : IDesafioService
             TituloDesafio = dto.TituloDesafio,
             UsuarioCreacion = dto.UsuarioCreacion,
             UsuarioCierre = dto.UsuarioCierre,
-            UsuarioPublicacion = dto.UsuarioPublicacion
+            UsuarioPublicacion = dto.UsuarioPublicacion,
+            PuntosExtra = dto.PuntosExtra,
+            UsuarioCancela = dto.UsuarioCancela
         };
-
         var created = await _desafioRepository.CreateAsync(entidad);
         if (created == null)
         {
@@ -50,7 +52,7 @@ public class DesafiosService : IDesafioService
 
         // var dto = _mapper.MapBack<InformacionGeneralDto>(created);
         var newDto = new InformacionGeneralDto
-        { 
+        {
             DescripcionDesafio = created.DescripcionDesafio,
             IdDesafio = created.IdDesafio,
             IdSegmentacion = created.IdSegmentacion,
@@ -67,14 +69,16 @@ public class DesafiosService : IDesafioService
             TituloDesafio = created.TituloDesafio,
             UsuarioCreacion = created.UsuarioCreacion,
             UsuarioCierre = created.UsuarioCierre,
-            UsuarioPublicacion = created.UsuarioPublicacion
+            UsuarioPublicacion = created.UsuarioPublicacion,
+            PuntosExtra = created.PuntosExtra,
+            UsuarioCancela = created.UsuarioCancela
         };
         return newDto;
     }
 
     public Task<bool> DeleteAsync(int id)
     {
-        throw new NotImplementedException();
+        return _desafioRepository.DeleteAsync(id);
     }
 
     public async Task<List<InformacionGeneralDto>> GetAllAsync(DesafioRequestDto requestDto)
@@ -115,7 +119,9 @@ public class DesafiosService : IDesafioService
             TituloDesafio = d.TituloDesafio,
             UsuarioCreacion = d.UsuarioCreacion,
             UsuarioCierre = d.UsuarioCierre,
-            UsuarioPublicacion = d.UsuarioPublicacion
+            UsuarioPublicacion = d.UsuarioPublicacion,
+            PuntosExtra = d.PuntosExtra,
+            UsuarioCancela = d.UsuarioCancela
         }).ToList();
 
         return dto;
@@ -147,13 +153,50 @@ public class DesafiosService : IDesafioService
             TituloDesafio = desafio.TituloDesafio,
             UsuarioCreacion = desafio.UsuarioCreacion,
             UsuarioCierre = desafio.UsuarioCierre,
-            UsuarioPublicacion = desafio.UsuarioPublicacion
+            UsuarioPublicacion = desafio.UsuarioPublicacion,
+            PuntosExtra = desafio.PuntosExtra,
+            UsuarioCancela = desafio.UsuarioCancela
         };
         return dto;
     }
 
-    public Task<InformacionGeneralDto> UpdateAsync(int id, InformacionGeneralDto dto)
+    public async Task<InformacionGeneralDto> UpdateAsync(int id, InformacionGeneralUpdateDto dto)
     {
-        throw new NotImplementedException();
+        var entidad = new InformacionGeneralUpdate
+        {
+            IdDesafio = dto.IdDesafio,
+            TituloDesafio = dto.TituloDesafio,
+            DescripcionDesafio = dto.DescripcionDesafio,
+            LogotipoDesafio = dto.LogotipoDesafio,
+            Promocion = dto.Promocion,
+            PuntosExtra = dto.PuntosExtra
+        };
+        var updated = await _desafioRepository.UpdateAsync(entidad);
+        if (updated == null)
+        {
+            throw new Exception("Error al actualizar el desafío");
+        }
+        return new InformacionGeneralDto
+        {
+            IdDesafio = updated.IdDesafio,
+            TituloDesafio = updated.TituloDesafio,
+            DescripcionDesafio = updated.DescripcionDesafio,
+            LogotipoDesafio = updated.LogotipoDesafio,
+            Promocion = updated.Promocion,
+            PuntosExtra = updated.PuntosExtra,
+            UsuarioCancela = updated.UsuarioCancela,
+            Estatus = updated.Estatus,
+            FechaCreacion = updated.FechaCreacion,
+            FechaCancela = updated.FechaCancela,
+            FechaCierre = updated.FechaCierre,
+            FechaFinalizacion = updated.FechaFinalizacion,
+            FechaInicio = updated.FechaInicio,
+            FechaPublicacion = updated.FechaPublicacion,
+            IdSegmentacion = updated.IdSegmentacion,
+            JsonMateriales = updated.JsonMateriales,
+            UsuarioCierre = updated.UsuarioCierre,
+            UsuarioCreacion = updated.UsuarioCreacion,
+            UsuarioPublicacion = updated.UsuarioPublicacion
+        };
     }
 }
