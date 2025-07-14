@@ -1,13 +1,15 @@
 using KOF.Desafios.Application.Desafios.Dto;
+using KOF.Desafios.Application.Dtos.Desafios;
+using KOF.Desafios.Application.Dtos.Desafios.Request;
 
 namespace KOF.Desafios.Application.Desafios.Interfaces
 {
     public interface IDesafioService
     {
-        Task<IEnumerable<DesafioDto>> GetAllAsync();
-        Task<DesafioDto?> GetByIdAsync(int id);
-        Task<DesafioDto> CreateAsync(DesafioDto dto);
-        Task<DesafioDto> UpdateAsync(int id, DesafioDto dto);
+        Task<List<InformacionGeneralDto>> GetAllAsync(DesafioRequestDto requestDto);
+        Task<InformacionGeneralDto?> GetByIdAsync(int id);
+        Task<InformacionGeneralDto> CreateAsync(InformacionGeneralDto dto);
+        Task<InformacionGeneralDto> UpdateAsync(int id, InformacionGeneralDto dto);
         Task<bool> DeleteAsync(int id);
     }
 }

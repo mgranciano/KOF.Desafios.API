@@ -17,4 +17,12 @@
     <ProjectReference Include="..\KOF.Desafios.Domain\KOF.Desafios.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Desafios\Dto\Reponse\" />
+    <Folder Include="Desafios\Dto\Request\" />
+    <Folder Include="Desafios\Entities\" />
+    <Folder Include="Desafios\Entities\Request\" />
+    <Folder Include="Desafios\Services\" />
+  </ItemGroup>
+
 </Project>

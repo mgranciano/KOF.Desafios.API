@@ -10,8 +10,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddCustomSwagger();
 builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddCustomCors();
-builder.Services.AddCustomServices(builder.Configuration);
-builder.Services.AddCustomMappers();
+builder.Services.AddCustomServices(builder.Configuration)
+.AddCustomMappers()
+.AddDesafiosModule(builder.Configuration)
+.AddValidators();
+
 
 // Logging
 builder.Services.AddApplicationInsightsTelemetry(builder.Configuration["ApplicationInsights:ConnectionString"]);

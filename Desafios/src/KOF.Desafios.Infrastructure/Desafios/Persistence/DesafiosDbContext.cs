@@ -1,34 +1,18 @@
 using Microsoft.EntityFrameworkCore;
 using KOF.Desafios.Domain.Entities;
+using KOF.Desafios.Domain.Entities.Desafios;
 
 namespace KOF.Desafios.Infrastructure.Persistence
 {
     public class DesafiosDbContext : DbContext
     {
-        public DesafiosDbContext(DbContextOptions<DesafiosDbContext> options)
-            : base(options)
-        {
-        }
+        public DbSet<InformacionGeneral> InformacionGeneral { get; set; }
+        public DbSet<InformacionParticipante> InformacionParticipante { get; set; }
 
-        public DbSet<Desafio> Desafios { get; set; }
-
+        public DesafiosDbContext(DbContextOptions<DesafiosDbContext> options) : base(options) { }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<Desafio>(entity =>
-            {
-                entity.ToTable("Desafios");
-
-                entity.HasKey(d => d.Id);
-
-                entity.Property(d => d.Titulo)
-                      .IsRequired()
-                      .HasMaxLength(200);
-
-                entity.Property(d => d.FechaInicio)
-                      .IsRequired();
-            });
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(DesafiosDbContext).Assembly);
         }
     }
 }

@@ -22,14 +22,9 @@ public static class DependencyInjection
     {
         services.AddScoped<ILogService, LogService>();
         services.AddScoped<IAuthService, AuthService>();
-        services.AddScoped<IDesafioService, DesafioService>();
         services.AddScoped<IValidator<DesafioDto>, DesafioDtoValidator>();
 
         services.AddScoped<RequestContext>();
-        
-        services.AddDbContext<DesafiosDbContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"))
-        );
 
         services.AddCustomMappers();
 

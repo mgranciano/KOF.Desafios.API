@@ -5,32 +5,39 @@ using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Authorization;
 using KOF.Desafios.Application.Common.Logging;
+using KOF.Desafios.Domain.Entities;
+using KOF.Desafios.Application.Dtos.Desafios.Request;
+using KOF.Desafios.Application.Common.Validators.Interfaces;
+using KOF.Desafios.Domain.Common.Enums;
+using KOF.Desafios.Application.Dtos.Desafios;
 
 namespace KOF.Desafios.PublicAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
+    // [Authorize]
     public class DesafiosController : ControllerBase
     {
         private readonly ILogService _logService;
         private readonly IDesafioService _desafioService;
-        private readonly IValidator<DesafioDto> _validator;
+        private readonly IValidatorOrquestador _validatorOrquestador;
 
-        public DesafiosController(ILogService logService, IDesafioService desafioService, IValidator<DesafioDto> validator)
+        public DesafiosController(ILogService logService, IDesafioService desafioService, IValidatorOrquestador validatorOrquestador)
         {
             _logService = logService;
             _desafioService = desafioService;
-            _validator = validator;
+            _validatorOrquestador = validatorOrquestador;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+        [HttpPost("GetAll")]
+        public async Task<IActionResult> GetAll([FromBody] DesafioRequestDto requestDto)
         {
-            _logService.LogInfo("Inicio de consulta de desafío");
-
-            var desafios = await _desafioService.GetAllAsync();
-            return Ok(desafios);    
+            {
+                _logService.LogInfo("Inicio de consulta de desafío");
+                await _validatorOrquestador.ValidateAsync(requestDto, Operacion.Read);
+                var desafios = await _desafioService.GetAllAsync(requestDto);
+                return Ok(desafios);
+            }
         }
 
         [HttpGet("{id}")]
@@ -45,29 +52,26 @@ namespace KOF.Desafios.PublicAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] DesafioDto dto)
+        public async Task<IActionResult> Create([FromBody] InformacionGeneralDto dto)
         {
             _logService.LogInfo("Inicio de creación de nuevo desafío");
 
-            ValidationResult result = await _validator.ValidateAsync(dto);
-            if (!result.IsValid)
-                return BadRequest(result.Errors);
+            await _validatorOrquestador.ValidateAsync(dto, Operacion.Create);
 
             var created = await _desafioService.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+            return CreatedAtAction(nameof(GetById), new { id = created.IdDesafio }, created);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] DesafioDto dto)
+        public async Task<IActionResult> Update(int id, [FromBody] InformacionGeneralDto dto)
         {
             _logService.LogInfo($"Inicio de actualización de desafío con ID: {id}");
 
-            if (id != dto.Id)
+            if (id != dto.IdDesafio)
                 return BadRequest("ID mismatch");
 
-            ValidationResult result = await _validator.ValidateAsync(dto);
-            if (!result.IsValid)
-                return BadRequest(result.Errors);
+            await _validatorOrquestador.ValidateAsync(dto, Operacion.Update);
+
 
             var updated = await _desafioService.UpdateAsync(id, dto);
             return Ok(updated);
