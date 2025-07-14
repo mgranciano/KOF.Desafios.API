@@ -19,9 +19,57 @@ public class DesafiosService : IDesafioService
         _desafioRepository = desafioRepository;
     }
 
-    public Task<InformacionGeneralDto> CreateAsync(InformacionGeneralDto dto)
+    public async Task<InformacionGeneralDto> CreateAsync(InformacionGeneralDto dto)
     {
-        throw new NotImplementedException();
+        var entidad = new InformacionGeneral
+        {
+            DescripcionDesafio = dto.DescripcionDesafio,
+            IdDesafio = dto.IdDesafio,
+            IdSegmentacion = dto.IdSegmentacion,
+            Estatus = dto.Estatus,
+            FechaCreacion = dto.FechaCreacion,
+            FechaCancela = dto.FechaCancela,
+            FechaCierre = dto.FechaCierre,
+            FechaFinalizacion = dto.FechaFinalizacion,
+            FechaInicio = dto.FechaInicio,
+            FechaPublicacion = dto.FechaPublicacion,
+            JsonMateriales = dto.JsonMateriales,
+            LogotipoDesafio = dto.LogotipoDesafio,
+            Promocion = dto.Promocion,
+            TituloDesafio = dto.TituloDesafio,
+            UsuarioCreacion = dto.UsuarioCreacion,
+            UsuarioCierre = dto.UsuarioCierre,
+            UsuarioPublicacion = dto.UsuarioPublicacion
+        };
+
+        var created = await _desafioRepository.CreateAsync(entidad);
+        if (created == null)
+        {
+            throw new Exception("Error al crear el desafío");
+        }
+
+        // var dto = _mapper.MapBack<InformacionGeneralDto>(created);
+        var newDto = new InformacionGeneralDto
+        { 
+            DescripcionDesafio = created.DescripcionDesafio,
+            IdDesafio = created.IdDesafio,
+            IdSegmentacion = created.IdSegmentacion,
+            Estatus = created.Estatus,
+            FechaCreacion = created.FechaCreacion,
+            FechaCancela = created.FechaCancela,
+            FechaCierre = created.FechaCierre,
+            FechaFinalizacion = created.FechaFinalizacion,
+            FechaInicio = created.FechaInicio,
+            FechaPublicacion = created.FechaPublicacion,
+            JsonMateriales = created.JsonMateriales,
+            LogotipoDesafio = created.LogotipoDesafio,
+            Promocion = created.Promocion,
+            TituloDesafio = created.TituloDesafio,
+            UsuarioCreacion = created.UsuarioCreacion,
+            UsuarioCierre = created.UsuarioCierre,
+            UsuarioPublicacion = created.UsuarioPublicacion
+        };
+        return newDto;
     }
 
     public Task<bool> DeleteAsync(int id)

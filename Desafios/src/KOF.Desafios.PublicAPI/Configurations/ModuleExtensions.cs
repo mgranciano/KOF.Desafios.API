@@ -3,6 +3,8 @@ using FluentValidation;
 using KOF.Desafios.Application.Common.Validators.Interfaces;
 using KOF.Desafios.Application.Common.Validators.Orquestador;
 using KOF.Desafios.Application.Desafios.Interfaces;
+using KOF.Desafios.Application.Desafios.Validators.Desafios.Request;
+using KOF.Desafios.Application.Dtos.Desafios;
 using KOF.Desafios.Application.Dtos.Desafios.Request;
 using KOF.Desafios.Application.Interfaces.Desafios;
 using KOF.Desafios.Application.Services.Desafios;
@@ -30,6 +32,8 @@ public static class ModuleExtensions
     {
         // FluentValidation
         services.AddScoped<IValidator<DesafioRequestDto>, DesafioRequestDtoReadValidator>();
+        services.AddScoped<IValidator<InformacionGeneralDto>, InformacionGeneralDtoCreateValidator>();
+        services.AddScoped<InformacionGeneralDtoCreateValidator>();
         services.AddScoped<DesafioRequestDtoReadValidator>();
 
         // Orquestador de validación

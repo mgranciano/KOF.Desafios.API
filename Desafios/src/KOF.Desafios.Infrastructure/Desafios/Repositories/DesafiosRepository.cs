@@ -30,7 +30,12 @@ namespace KOF.Desafios.Infrastructure.Desafios.Services
 
         public async Task<InformacionGeneral> CreateAsync(InformacionGeneral desafio)
         {
-            throw new NotImplementedException();
+            _logService.LogInfo("Creating new desafio");
+            _context.InformacionGeneral.Add(desafio);
+            await _context.SaveChangesAsync();
+            _logService.LogInfo($"Desafio created with ID: {desafio.IdDesafio}");
+
+            return desafio;
         }
 
         public async Task<bool> DeleteAsync(int id)
